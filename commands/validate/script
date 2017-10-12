@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+#/ command: semver:validate: "validate input semantic version"
+#/ usage: rerun semver:validate  --input_version <> 
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables: INPUT_VERSION
+
+. $RERUN_MODULE_DIR/lib/functions.sh validate || { 
+  echo >&2 "Failed loading function library." ; exit 1 ; 
+}
+
+set -o errexit -o nounset -o pipefail
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+
+# - - -
+semver_validate "$INPUT_VERSION"
+# - - -
+
+# Done. Exit with last command exit status.
+exit $?

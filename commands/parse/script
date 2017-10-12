@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+#/ command: semver:parse: "parse input string for semantic version"
+#/ usage: rerun semver:parse  --input_string <> [ --trim_suffix <>] 
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables: INPUT_STRING TRIM_SUFFIX
+
+. $RERUN_MODULE_DIR/lib/functions.sh parse || { 
+  echo >&2 "Failed loading function library." ; exit 1 ; 
+}
+
+set -o errexit -o nounset -o pipefail
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+
+# - - -
+if [ -n "$TRIM_SUFFIX" ]; then
+  semver_parse "$INPUT_STRING" "$TRIM_SUFFIX"
+else
+  semver_parse "$INPUT_STRING"
+fi
+# - - -
+
+# Done. Exit with last command exit status.
+exit $?

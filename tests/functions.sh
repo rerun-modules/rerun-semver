@@ -1,0 +1,34 @@
+# 
+# Test functions for command tests.
+#
+
+# - - -
+# Your functions declared here.
+# - - -
+
+# Constants
+
+## release patch diff
+RELEASE_VERSION_TWO_FOUR_SIX="2.4.6"
+RELEASE_VERSION_TWO_FOUR_EIGHT="2.4.8"
+
+## release minor diff
+RELEASE_VERSION_TWO_FIVE_FOUR="2.5.4"
+RELEASE_VERSION_TWO_EIGHT_FOUR="2.8.4"
+
+## release major diff
+RELEASE_VERSION_FOUR_SEVEN_THREE="4.7.3"
+RELEASE_VERSION_TEN_SEVEN_THREE="10.7.3"
+
+## special / patch special diff
+SPECIAL_VERSION_TWO_FOUR_SIX_RC_ONE="2.4.6-rc1"
+SPECIAL_VERSION_TWO_FOUR_SIX_RC_TEN="2.4.6-rc10"
+SPECIAL_VERSION_TWO_FOUR_EIGHT_RC_ONE="2.4.8-rc1"
+
+## minor special diff
+SPECIAL_VERSION_TWO_FIVE_FOUR_RC_ONE="2.5.4-rc1"
+SPECIAL_VERSION_TWO_EIGHT_FOUR_RC_ONE="2.8.4-rc1"
+
+## major special diff
+SPECIAL_VERSION_FOUR_SEVEN_THREE_RC_ONE="4.7.3-rc1"
+SPECIAL_VERSION_TEN_SEVEN_THREE_RC_ONE="10.7.3-rc1"

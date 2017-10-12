@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+#/ command: semver:compare: "compare semantic versions"
+#/ usage: rerun semver:compare  --left_version <>  --right_version <>  --compare <> 
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables: LEFT_VERSION RIGHT_VERSION COMPARE
+
+. $RERUN_MODULE_DIR/lib/functions.sh compare || { 
+  echo >&2 "Failed loading function library." ; exit 1 ; 
+}
+
+set -o errexit -o nounset -o pipefail
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+
+# - - -
+semver_compare "$LEFT_VERSION" "$COMPARE" "$RIGHT_VERSION"
+# - - -
+
+# Done. Exit with last command exit status.
+exit $?
