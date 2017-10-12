@@ -24,28 +24,18 @@ fi
 # Your functions declared here.
 # - - -
 
+# Constants
+
 #
-# semantic versioning 2.0
+# semantic versioning 2.0.0
 # semver.org
 #
-
-# un-escaped regex (with capture groups, no outside boundary)
-# ([0-9]{1,})\.([0-9]{1,})(\.([0-9]{1,})(-(([0-9a-zA-Z]{1,}[.-]{0,1}){0,}[0-9a-zA-Z]{1,})){0,1}){0,1}
-#
-# un-escaped regex (with capture groups)
-# ^([0-9]{1,})\.([0-9]{1,})(\.([0-9]{1,})(-(([0-9a-zA-Z]{1,}[.-]{0,1}){0,}[0-9a-zA-Z]{1,})){0,1}){0,1}$
-#
-# sed-escaped, basic (POSIX compliant) regex (with capture groups)
-# ^\([0-9]\{1,\}\)\.\([0-9]\{1,\}\)\(\.\([0-9]\{1,\}\)\(-\(\([0-9a-zA-Z]\{1,\}[.-]\{0,1\}\)\{0,\}[0-9a-zA-Z]\{1,\}\)\)\{0,1\}\)\{0,1\}$
-#
-# capture groups
+# regex capture groups
 # major.minor.patch-special
 # 1) major
 # 2) minor
-# 4) patch
-# 6) special
-
-# Constants
+# 3) patch
+# 5) special
 
 SEMVER_RE='([0-9]{1,})\.([0-9]{1,})\.([0-9]{1,})(-(([0-9a-zA-Z]{1,}[.-]{0,1}){0,}[0-9a-zA-Z]{1,})){0,1}'
 SEMVER_RE_W_BOUNDARIES="^${SEMVER_RE}$"
@@ -153,7 +143,7 @@ semver_extract() {
   esac
   
   if [ -z "$input_version" ]; then
-    echo >&2 "input version is empty"; return 2
+    rerun_log "error" "input version is empty"; return 2
   fi
   
   # validate input version
@@ -194,7 +184,7 @@ semver_extract() {
   #   if the regex fails, the value gets returned unchanged
   #   thus if the extracted value == the original value, it failed to extract
   test "$extracted_version" != "$input_version" || {
-    echo >&2 "extracted version matches the input version, input version may be malformed: $input_version"; return 1
+    rerun_log "error" "extracted version matches the input version, input version may be malformed: $input_version"; return 1
   }
   
   # output extracted version
@@ -209,9 +199,9 @@ semver_extract() {
 # args:
 #   1 - left version (version under test)
 #   2 - comparison type:
-#     EQ
-#     LT
-#     GT
+#     eq
+#     lt
+#     gt
 #     pess_minor
 #     pess_patch
 #   3 - right version (version constraint or target)
@@ -477,7 +467,7 @@ semver_compare() {
       fi
       ;;
     *)
-      echo >&2 "comparison type is unsupported: $comparison_type"; return 2
+      rerun_log "error" "comparison type is unsupported: $comparison_type"; return 2
       ;;
   esac
   

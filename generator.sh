@@ -1,7 +1,7 @@
 # execution examples
 # RERUN_MODULES=$(pwd)/modules ./rerun semver:
 # RERUN_MODULES=$(pwd)/modules ./rerun semver: extract --input_version '1.4.8-rc01' --segment major
-# RERUN_MODULES=$(pwd)/modules ./rerun semver: compare --left_version '1.0.0' --equals --right_version '1.0.0'
+# RERUN_MODULES=$(pwd)/modules ./rerun semver: compare --left_version '1.0.0' --compare 'equals' --right_version '1.0.0'
 # RERUN_MODULES=$(pwd)/modules ./rerun semver: parse --input_string 'my-module-1.0.0-rc01.tar.gz' --trim_suffix '.tar.gz'
 # RERUN_MODULES=$(pwd)/modules ./rerun semver: validate --input_version '1.4.8-rc01'
 # RERUN_MODULES=$(pwd)/modules ./rerun stubbs: test --module semver --plan parse
