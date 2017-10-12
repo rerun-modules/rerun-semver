@@ -1,0 +1,33 @@
+dist: trusty
+sudo: false
+language: c
+compiler: gcc
+script: ./travis-ci.sh
+notifications:
+  irc:
+  - irc.freenode.org#rerun
+addons:
+  apt:
+    packages:
+    - markdown
+    - fakeroot
+    - build-essential
+    - devscripts
+    - autoconf
+    - automake
+    - dh-make
+    - libfile-fcntllock-perl
+    - rpm
+    - xmlstarlet
+    - jq
+    - wget
+    - zip
+    - rerun
+    - bintray
+    sources:
+    - sourceline: deb https://dl.bintray.com/rerun/rerun-deb /
+env:
+  global:
+  - BINTRAY_USER=stagrlee
+  - BINTRAY_ORG=rerun
+  - secure: JWYIgzYTHTu1UMheMq5pAJxAWMytieKZY2MD3CaPAGFxtGPtUQJmA62drfjsa9ar+QSOkqOF74fxQcGCqOQCvXOjnm11xyVjuzN/7Jcov8bLh6Xc6w6AbT4KMh4V/nxu4C69iln9+el9CIlbSWnGOKLXrJSSXXF469O3CvQw0aSBQxot7GkhvSS6/0yN0WiYqpLiuXjdMGyDdQlq8LyOnxfkYK1+8vJZiPA2Pl+e++jfZbJSChdjsaTYOcswWWaTvZcdHtKo4CXgwjGVjcz0S7BT/AdOEpBrk95ceC8T1NSmKk1H/mRerf8/jH+0ZxCgqNlWH72k6OsW3KE7iTAE800yB4JnIoW8Q4lCd7GriAnkCdsiwXK6D2Jhe47udwZLD67HnNSSPEqggJp2H5V3fTw5EUHOo3WUj0SxyWlHtAhbc//MDGN/Sfoca7fEKVgWAI18AkpxB4+DXp0PCU/H6ruyq3hLoHn1t4F+2Ba51zIPZfOpXVsipF7+2s3EI8Wr/yhJV0fhvH++ppQAhCFrul1Nc4LzZ9M9K2af37+7oOF5woAe0dNNgnJCQD4kbK1eCStuRqpcdyZr89aWAdULTKTbPVHlYcFCmhNk/JzUDbjSFkc7TnKBJWa/teruDD8keNV/m3l6fFwfFpt7I4XnWUcH1+h6u2U+0JN//xuDS/w=
