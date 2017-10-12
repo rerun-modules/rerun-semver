@@ -23,7 +23,7 @@ addons:
     - wget
     - zip
     - rerun
-    - bintray
+    - rerun-bintray
     sources:
     - sourceline: deb https://dl.bintray.com/rerun/rerun-deb /
 env:
