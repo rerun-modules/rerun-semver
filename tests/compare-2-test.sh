@@ -58,9 +58,9 @@ it_ret1_when_rel_ver_noteq_rel_ver_patch() {
 it_ret1_when_rel_ver_noteq_rel_ver_minor() {
   local exitcode=
   $(rerun semver: compare \
-    --left_version "$RELEASE_VERSION_TWO_FIVE_FOUR" \
+    --left_version "$RELEASE_VERSION_TWO_FOUR_SIX" \
     --compare "eq" \
-    --right_version "$RELEASE_VERSION_TWO_EIGHT_FOUR") && {
+    --right_version "$RELEASE_VERSION_TWO_SIX_SIX") && {
     echo >&2 "rerun test command succeeded"; return 1
   } || {
     exitcode=$?; test $exitcode -eq 1
@@ -75,9 +75,9 @@ it_ret1_when_rel_ver_noteq_rel_ver_minor() {
 it_ret1_when_rel_ver_noteq_rel_ver_major() {
   local exitcode=
   $(rerun semver: compare \
-    --left_version "$RELEASE_VERSION_FOUR_SEVEN_THREE" \
+    --left_version "$RELEASE_VERSION_TWO_FOUR_SIX" \
     --compare "eq" \
-    --right_version "$RELEASE_VERSION_TEN_SEVEN_THREE") && {
+    --right_version "$RELEASE_VERSION_EIGHT_FOUR_SIX") && {
     echo >&2 "rerun test command succeeded"; return 1
   } || {
     exitcode=$?; test $exitcode -eq 1

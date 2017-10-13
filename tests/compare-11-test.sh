@@ -13,49 +13,59 @@ rerun() {
 
 # The Plan
 # --------
-describe "compare-release-less-than-release"
+describe "compare-rc-less-than-release"
 
 #
-# comparison type: less than -- release versions
+# comparison type: less than -- left rc version, right release version
 #
 
 # ------------------------------
-# X.X.(Y) < X.X.(Z)
+# X.X.X-(A) < X.X.X
 # ------------------------------
-it_ret0_when_rel_ver_lt_rel_ver_patch() {
+it_ret0_when_rc_ver_lt_rel_ver_special() {
   rerun semver: compare \
-    --left_version "$RELEASE_VERSION_TWO_FOUR_SIX" \
+    --left_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE" \
+    --compare "lt" \
+    --right_version "$RELEASE_VERSION_TWO_FOUR_SIX"
+}
+
+# ------------------------------
+# X.X.(Y)-A < X.X.(X)
+# ------------------------------
+it_ret0_when_rc_ver_lt_rel_ver_patch() {
+  rerun semver: compare \
+    --left_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE" \
     --compare "lt" \
     --right_version "$RELEASE_VERSION_TWO_FOUR_EIGHT"
 }
 
 # ------------------------------
-# X.(Y).X < X.(Z).X
+# X.(Y).X-A < X.(X).X
 # ------------------------------
-it_ret0_when_rel_ver_lt_rel_ver_minor() {
+it_ret0_when_rc_ver_lt_rel_ver_minor() {
   rerun semver: compare \
-    --left_version "$RELEASE_VERSION_TWO_FOUR_SIX" \
+    --left_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE" \
     --compare "lt" \
     --right_version "$RELEASE_VERSION_TWO_SIX_SIX"
 }
 
 # ------------------------------
-# (Y).X.X < (Z).X.X
+# (Y).X.X-A < (Z).X.X
 # ------------------------------
-it_ret0_when_rel_ver_lt_rel_ver_major() {
+it_ret0_when_rc_ver_lt_rel_ver_major() {
   rerun semver: compare \
-    --left_version "$RELEASE_VERSION_TWO_FOUR_SIX" \
+    --left_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE" \
     --compare "lt" \
     --right_version "$RELEASE_VERSION_EIGHT_FOUR_SIX"
 }
 
 # ------------------------------
-# X.X.(Y) !< X.X.(Z)
+# X.X.(Y)-A !< X.X.(Z)
 # ------------------------------
-it_ret1_when_rel_ver_notlt_rel_ver_patch() {
+it_ret1_when_rc_ver_notlt_rel_ver_patch() {
   local exitcode=
   $(rerun semver: compare \
-    --left_version "$RELEASE_VERSION_TWO_FOUR_EIGHT" \
+    --left_version "$RC_VERSION_TWO_FOUR_EIGHT_RC_ONE" \
     --compare "lt" \
     --right_version "$RELEASE_VERSION_TWO_FOUR_SIX") && {
     echo >&2 "rerun test command succeeded"; return 1
@@ -67,12 +77,12 @@ it_ret1_when_rel_ver_notlt_rel_ver_patch() {
 }
 
 # ------------------------------
-# X.(Y).X !< X.(Z).X
+# X.(Y).X-A !< X.(Z).X
 # ------------------------------
-it_ret1_when_rel_ver_notlt_rel_ver_minor() {
+it_ret1_when_rc_ver_notlt_rel_ver_minor() {
   local exitcode=
   $(rerun semver: compare \
-    --left_version "$RELEASE_VERSION_TWO_SIX_SIX" \
+    --left_version "$RC_VERSION_TWO_SIX_SIX_RC_ONE" \
     --compare "lt" \
     --right_version "$RELEASE_VERSION_TWO_FOUR_SIX") && {
     echo >&2 "rerun test command succeeded"; return 1
@@ -84,12 +94,12 @@ it_ret1_when_rel_ver_notlt_rel_ver_minor() {
 }
 
 # ------------------------------
-# (Y).X.X < (Z).X.X
+# (Y).X.X-A !< (Z).X.X
 # ------------------------------
-it_ret1_when_rel_ver_notlt_rel_ver_major() {
+it_ret1_when_rc_ver_notlt_rel_ver_major() {
   local exitcode=
   $(rerun semver: compare \
-    --left_version "$RELEASE_VERSION_EIGHT_FOUR_SIX" \
+    --left_version "$RC_VERSION_EIGHT_FOUR_SIX_RC_ONE" \
     --compare "lt" \
     --right_version "$RELEASE_VERSION_TWO_FOUR_SIX") && {
     echo >&2 "rerun test command succeeded"; return 1
