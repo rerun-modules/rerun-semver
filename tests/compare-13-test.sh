@@ -20,49 +20,26 @@ describe "compare-rc-greater-than-rc"
 #
 
 # ------------------------------
-# X.X.X-(A) > X.X.X-(B)
+# X.X.X-Z > X.X.X-Z ?
 # ------------------------------
-it_ret0_when_rc_ver_gt_rc_ver_special() {
-  rerun semver: compare \
-    --left_version "$RC_VERSION_TWO_FOUR_SIX_RC_TWO" \
+it_ret1_when_rc_ver_eq_rc_ver() {
+  local exitcode=
+  $(rerun semver: compare \
+    --left_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE" \
     --compare "gt" \
-    --right_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE"
+    --right_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE") && {
+    echo >&2 "rerun test command succeeded"; return 1
+  } || {
+    exitcode=$?; test $exitcode -eq 1
+  } || {
+    echo >&2 "rerun test command failed with exit code: $exitcode"; return 1
+  }
 }
 
 # ------------------------------
-# X.X.(Y)-A > X.X.(Z)-B
+# X.X.X-(1) > X.X.X-(2) ?
 # ------------------------------
-it_ret0_when_rc_ver_gt_rc_ver_patch() {
-  rerun semver: compare \
-    --left_version "$RC_VERSION_TWO_FOUR_EIGHT_RC_ONE" \
-    --compare "gt" \
-    --right_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE"
-}
-
-# ------------------------------
-# X.(Y).X-A > X.(Z).X-B
-# ------------------------------
-it_ret0_when_rc_ver_gt_rc_ver_minor() {
-  rerun semver: compare \
-    --left_version "$RC_VERSION_TWO_SIX_SIX_RC_ONE" \
-    --compare "gt" \
-    --right_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE"
-}
-
-# ------------------------------
-# (Y).X.X-A > (Z).X.X-B
-# ------------------------------
-it_ret0_when_rc_ver_gt_rc_ver_major() {
-  rerun semver: compare \
-    --left_version "$RC_VERSION_EIGHT_FOUR_SIX_RC_ONE" \
-    --compare "gt" \
-    --right_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE"
-}
-
-# ------------------------------
-# X.X.X-(A) !> X.X.X-(B)
-# ------------------------------
-it_ret1_when_rc_ver_notgt_rc_ver_special() {
+it_ret1_when_rc_special_ver_lt_rc_special_ver() {
   local exitcode=
   $(rerun semver: compare \
     --left_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE" \
@@ -77,9 +54,19 @@ it_ret1_when_rc_ver_notgt_rc_ver_special() {
 }
 
 # ------------------------------
-# X.X.(Y)-A !> X.X.(Z)-B
+# X.X.X-(2) > X.X.X-(1) ?
 # ------------------------------
-it_ret1_when_rc_ver_notgt_rc_ver_patch() {
+it_ret0_when_rc_special_ver_gt_rc_special_ver() {
+  rerun semver: compare \
+    --left_version "$RC_VERSION_TWO_FOUR_SIX_RC_TWO" \
+    --compare "gt" \
+    --right_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE"
+}
+
+# ------------------------------
+# X.X.(1)-Z > X.X.(2)-Z ?
+# ------------------------------
+it_ret1_when_rc_patch_ver_lt_rc_patch_ver() {
   local exitcode=
   $(rerun semver: compare \
     --left_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE" \
@@ -94,9 +81,19 @@ it_ret1_when_rc_ver_notgt_rc_ver_patch() {
 }
 
 # ------------------------------
-# X.(Y).X-A !> X.(Z).X-B
+# X.X.(2)-Z > X.X.(1)-Z ?
 # ------------------------------
-it_ret1_when_rc_ver_notgt_rc_ver_minor() {
+it_ret0_when_rc_patch_ver_gt_rc_patch_ver() {
+  rerun semver: compare \
+    --left_version "$RC_VERSION_TWO_FOUR_EIGHT_RC_ONE" \
+    --compare "gt" \
+    --right_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE"
+}
+
+# ------------------------------
+# X.(1).X-Z > X.(2).X-Z ?
+# ------------------------------
+it_ret1_when_rc_minor_ver_lt_rc_minor_ver() {
   local exitcode=
   $(rerun semver: compare \
     --left_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE" \
@@ -111,9 +108,19 @@ it_ret1_when_rc_ver_notgt_rc_ver_minor() {
 }
 
 # ------------------------------
-# (Y).X.X-A !> (Z).X.X-B
+# X.(2).X-Z > X.(1).X-Z ?
 # ------------------------------
-it_ret1_when_rc_ver_notgt_rc_ver_major() {
+it_ret0_when_rc_minor_ver_gt_rc_minor_ver() {
+  rerun semver: compare \
+    --left_version "$RC_VERSION_TWO_SIX_SIX_RC_ONE" \
+    --compare "gt" \
+    --right_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE"
+}
+
+# ------------------------------
+# (1).X.X-Z > (2).X.X-Z ?
+# ------------------------------
+it_ret1_when_rc_major_ver_lt_rc_major_ver() {
   local exitcode=
   $(rerun semver: compare \
     --left_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE" \
@@ -125,4 +132,14 @@ it_ret1_when_rc_ver_notgt_rc_ver_major() {
   } || {
     echo >&2 "rerun test command failed with exit code: $exitcode"; return 1
   }
+}
+
+# ------------------------------
+# (2).X.X-Z > (1).X.X-Z ?
+# ------------------------------
+it_ret0_when_rc_major_ver_gt_rc_major_ver() {
+  rerun semver: compare \
+    --left_version "$RC_VERSION_EIGHT_FOUR_SIX_RC_ONE" \
+    --compare "gt" \
+    --right_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE"
 }

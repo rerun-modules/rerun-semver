@@ -20,9 +20,9 @@ describe "compare-rc-less-than-release"
 #
 
 # ------------------------------
-# X.X.X-(A) < X.X.X
+# X.X.X-Z < X.X.X ?
 # ------------------------------
-it_ret0_when_rc_ver_lt_rel_ver_special() {
+it_ret0_when_rc_ver_lt_rel_ver() {
   rerun semver: compare \
     --left_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE" \
     --compare "lt" \
@@ -30,9 +30,9 @@ it_ret0_when_rc_ver_lt_rel_ver_special() {
 }
 
 # ------------------------------
-# X.X.(Y)-A < X.X.(X)
+# X.X.(1)-Z < X.X.(2) ?
 # ------------------------------
-it_ret0_when_rc_ver_lt_rel_ver_patch() {
+it_ret0_when_rc_patch_ver_lt_rel_patch_ver() {
   rerun semver: compare \
     --left_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE" \
     --compare "lt" \
@@ -40,29 +40,9 @@ it_ret0_when_rc_ver_lt_rel_ver_patch() {
 }
 
 # ------------------------------
-# X.(Y).X-A < X.(X).X
+# X.X.(2)-Z < X.X.(1) ?
 # ------------------------------
-it_ret0_when_rc_ver_lt_rel_ver_minor() {
-  rerun semver: compare \
-    --left_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE" \
-    --compare "lt" \
-    --right_version "$RELEASE_VERSION_TWO_SIX_SIX"
-}
-
-# ------------------------------
-# (Y).X.X-A < (Z).X.X
-# ------------------------------
-it_ret0_when_rc_ver_lt_rel_ver_major() {
-  rerun semver: compare \
-    --left_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE" \
-    --compare "lt" \
-    --right_version "$RELEASE_VERSION_EIGHT_FOUR_SIX"
-}
-
-# ------------------------------
-# X.X.(Y)-A !< X.X.(Z)
-# ------------------------------
-it_ret1_when_rc_ver_notlt_rel_ver_patch() {
+it_ret1_when_rc_patch_ver_gt_rel_patch_ver() {
   local exitcode=
   $(rerun semver: compare \
     --left_version "$RC_VERSION_TWO_FOUR_EIGHT_RC_ONE" \
@@ -77,9 +57,19 @@ it_ret1_when_rc_ver_notlt_rel_ver_patch() {
 }
 
 # ------------------------------
-# X.(Y).X-A !< X.(Z).X
+# X.(1).X-Z < X.(2).X ?
 # ------------------------------
-it_ret1_when_rc_ver_notlt_rel_ver_minor() {
+it_ret0_when_rc_minor_ver_lt_rel_minor_ver() {
+  rerun semver: compare \
+    --left_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE" \
+    --compare "lt" \
+    --right_version "$RELEASE_VERSION_TWO_SIX_SIX"
+}
+
+# ------------------------------
+# X.(2).X-Z < X.(1).X ?
+# ------------------------------
+it_ret1_when_rc_minor_ver_gt_rel_minor_ver() {
   local exitcode=
   $(rerun semver: compare \
     --left_version "$RC_VERSION_TWO_SIX_SIX_RC_ONE" \
@@ -94,9 +84,19 @@ it_ret1_when_rc_ver_notlt_rel_ver_minor() {
 }
 
 # ------------------------------
-# (Y).X.X-A !< (Z).X.X
+# (1).X.X-Z < (2).X.X ?
 # ------------------------------
-it_ret1_when_rc_ver_notlt_rel_ver_major() {
+it_ret0_when_rc_major_ver_lt_rel_major_ver() {
+  rerun semver: compare \
+    --left_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE" \
+    --compare "lt" \
+    --right_version "$RELEASE_VERSION_EIGHT_FOUR_SIX"
+}
+
+# ------------------------------
+# (2).X.X-Z < (1).X.X ?
+# ------------------------------
+it_ret1_when_rc_major_ver_gt_rel_major_ver() {
   local exitcode=
   $(rerun semver: compare \
     --left_version "$RC_VERSION_EIGHT_FOUR_SIX_RC_ONE" \
