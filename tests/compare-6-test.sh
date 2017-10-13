@@ -91,3 +91,37 @@ it_ret3_when_right_rel_ver_invalid_lt() {
     echo >&2 "rerun test command failed with exit code: $exitcode"; return 1
   }
 }
+
+# ------------------------------
+# X.X !> X.X.X
+# ------------------------------
+it_ret3_when_left_rel_ver_invalid_gt() {
+  local exitcode=
+  $(rerun semver: compare \
+    --left_version "$RELEASE_VERSION_THREE_SEVEN" \
+    --compare "gt" \
+    --right_version "$RELEASE_VERSION_TWO_FOUR_SIX") && {
+    echo >&2 "rerun test command succeeded"; return 1
+  } || {
+    exitcode=$?; test $exitcode -eq 3
+  } || {
+    echo >&2 "rerun test command failed with exit code: $exitcode"; return 1
+  }
+}
+
+# ------------------------------
+# X.X.X !> X.X
+# ------------------------------
+it_ret3_when_right_rel_ver_invalid_gt() {
+  local exitcode=
+  $(rerun semver: compare \
+    --left_version "$RELEASE_VERSION_TWO_FOUR_SIX" \
+    --compare "gt" \
+    --right_version "$RELEASE_VERSION_THREE_SEVEN") && {
+    echo >&2 "rerun test command succeeded"; return 1
+  } || {
+    exitcode=$?; test $exitcode -eq 3
+  } || {
+    echo >&2 "rerun test command failed with exit code: $exitcode"; return 1
+  }
+}
