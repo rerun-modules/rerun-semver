@@ -76,6 +76,40 @@ it_ret3_when_both_rc_ver_invalid_w_gt() {
 }
 
 # ------------------------------
+# X.X-Z ~> X.X-Z ? pess_patch
+# ------------------------------
+it_ret3_when_both_rc_ver_invalid_w_pess_patch() {
+  local exitcode=
+  $(rerun semver: compare \
+    --left_version "$RC_VERSION_TWO_FOUR_RC_ONE" \
+    --compare "pess_patch" \
+    --right_version "$RC_VERSION_TWO_FOUR_RC_ONE") && {
+    echo >&2 "rerun test command succeeded"; return 1
+  } || {
+    exitcode=$?; test $exitcode -eq 3
+  } || {
+    echo >&2 "rerun test command failed with exit code: $exitcode"; return 1
+  }
+}
+
+# ------------------------------
+# X.X-Z ~> X.X-Z ? pess_minor
+# ------------------------------
+it_ret3_when_both_rc_ver_invalid_w_pess_minor() {
+  local exitcode=
+  $(rerun semver: compare \
+    --left_version "$RC_VERSION_TWO_FOUR_RC_ONE" \
+    --compare "pess_minor" \
+    --right_version "$RC_VERSION_TWO_FOUR_RC_ONE") && {
+    echo >&2 "rerun test command succeeded"; return 1
+  } || {
+    exitcode=$?; test $exitcode -eq 3
+  } || {
+    echo >&2 "rerun test command failed with exit code: $exitcode"; return 1
+  }
+}
+
+# ------------------------------
 # X.X-Z == X.X.X-Z ?
 # ------------------------------
 it_ret3_when_left_rc_ver_invalid_w_eq() {
@@ -127,6 +161,40 @@ it_ret3_when_left_rc_ver_invalid_w_gt() {
 }
 
 # ------------------------------
+# X.X-Z ~> X.X.X-Z ? pess_patch
+# ------------------------------
+it_ret3_when_left_rc_ver_invalid_w_pess_patch() {
+  local exitcode=
+  $(rerun semver: compare \
+    --left_version "$RC_VERSION_TWO_FOUR_RC_ONE" \
+    --compare "pess_patch" \
+    --right_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE") && {
+    echo >&2 "rerun test command succeeded"; return 1
+  } || {
+    exitcode=$?; test $exitcode -eq 3
+  } || {
+    echo >&2 "rerun test command failed with exit code: $exitcode"; return 1
+  }
+}
+
+# ------------------------------
+# X.X-Z ~> X.X.X-Z ? pess_minor
+# ------------------------------
+it_ret3_when_left_rc_ver_invalid_w_pess_minor() {
+  local exitcode=
+  $(rerun semver: compare \
+    --left_version "$RC_VERSION_TWO_FOUR_RC_ONE" \
+    --compare "pess_minor" \
+    --right_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE") && {
+    echo >&2 "rerun test command succeeded"; return 1
+  } || {
+    exitcode=$?; test $exitcode -eq 3
+  } || {
+    echo >&2 "rerun test command failed with exit code: $exitcode"; return 1
+  }
+}
+
+# ------------------------------
 # X.X.X-Z == X.X-Z ?
 # ------------------------------
 it_ret3_when_right_rc_ver_invalid_w_eq() {
@@ -168,6 +236,40 @@ it_ret3_when_right_rc_ver_invalid_w_gt() {
   $(rerun semver: compare \
     --left_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE" \
     --compare "gt" \
+    --right_version "$RC_VERSION_TWO_FOUR_RC_ONE") && {
+    echo >&2 "rerun test command succeeded"; return 1
+  } || {
+    exitcode=$?; test $exitcode -eq 3
+  } || {
+    echo >&2 "rerun test command failed with exit code: $exitcode"; return 1
+  }
+}
+
+# ------------------------------
+# X.X.X-Z ~> X.X-Z ? pess_patch
+# ------------------------------
+it_ret3_when_right_rc_ver_invalid_w_pess_patch() {
+  local exitcode=
+  $(rerun semver: compare \
+    --left_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE" \
+    --compare "pess_patch" \
+    --right_version "$RC_VERSION_TWO_FOUR_RC_ONE") && {
+    echo >&2 "rerun test command succeeded"; return 1
+  } || {
+    exitcode=$?; test $exitcode -eq 3
+  } || {
+    echo >&2 "rerun test command failed with exit code: $exitcode"; return 1
+  }
+}
+
+# ------------------------------
+# X.X.X-Z ~> X.X-Z ? pess_minor
+# ------------------------------
+it_ret3_when_right_rc_ver_invalid_w_pess_minor() {
+  local exitcode=
+  $(rerun semver: compare \
+    --left_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE" \
+    --compare "pess_minor" \
     --right_version "$RC_VERSION_TWO_FOUR_RC_ONE") && {
     echo >&2 "rerun test command succeeded"; return 1
   } || {

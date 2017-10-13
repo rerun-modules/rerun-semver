@@ -416,9 +416,41 @@ semver_compare() {
         # majors don't match, no further verification needed
         return 1
       # major matches, check minor
-      elif [ $left_minor -ge $right_minor ]; then
-        # minor A is ~> minor B
+      elif [ $left_minor -gt $right_minor ]; then
+        # minor A is > minor B
         return 0
+      elif [ $left_minor -eq $right_minor ]; then
+        # minor matches, check patch
+        if [ $left_patch -gt $right_patch ]; then
+          return 0
+        elif [ $left_patch -lt $right_patch ]; then
+          # left patch < right patch
+          return 1
+        elif [ $left_patch -eq $right_patch ]; then
+          # patch matches, check special
+          # special is considered a 'lesser' version than
+          # a version without a special (e.g. 1.0.0 is assumed newer than 1.0.0-alpha)
+          if [ "_$left_special"  == "_" ] && [ "_$right_special"  == "_" ]; then
+            # both specials are empty, versions match
+            return 0
+          elif [ "_$left_special"  == "_" ] && [ "_$right_special"  != "_" ]; then
+            # left version does not have special, right version does
+            return 0
+          elif [ "_$left_special"  != "_" ] && [ "_$right_special"  == "_" ]; then
+            # left version has special, right version does not
+            return 1
+          elif [ "_$left_special" "<" "_$right_special" ]; then
+            # left version special is ASCII less-than right version special
+            return 1
+          elif [ "_$left_special" ">" "_$right_special" ]; then
+            # left version special is ASCII greater-than right version special
+            return 0
+          elif [ "_$left_special" == "_$right_special" ]; then
+            # left version special matches right version special
+            # this must be tested after doing the 'empty' test above
+            return 0
+          fi
+        fi
       elif [ $left_minor -lt $right_minor ]; then
         # minor A is < minor B
         return 1
