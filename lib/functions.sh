@@ -513,6 +513,7 @@ semver_compare() {
 #   3 - (segment: special) new special version
 # return codes:
 #   0 - success
+#   1 - general error
 #   2 - input error
 semver_bump() {
   local bump_segment="${1:-}"
