@@ -1,5 +1,6 @@
 # execution examples
 # RERUN_MODULES=$(pwd)/modules ./rerun semver:
+# RERUN_MODULES=$(pwd)/modules ./rerun semver: bump --input_version '1.0.0' --segment 'special' --special 'rc01'
 # RERUN_MODULES=$(pwd)/modules ./rerun semver: extract --input_version '1.4.8-rc01' --segment major
 # RERUN_MODULES=$(pwd)/modules ./rerun semver: compare --left_version '1.0.0' --compare 'eq' --right_version '1.0.0'
 # RERUN_MODULES=$(pwd)/modules ./rerun semver: parse --input_string 'my-module-1.0.0-rc01.tar.gz' --trim_suffix '.tar.gz'
@@ -133,3 +134,15 @@ RERUN_MODULES=$(pwd)/modules ./rerun stubbs: \
   --module "semver" \
   --option "segment" \
   --required "true"
+
+# --special
+RERUN_MODULES=$(pwd)/modules ./rerun stubbs: \
+  add-option \
+  --arg "true" \
+  --command "bump" \
+  --description "special version" \
+  --export "false" \
+  --long "special" \
+  --module "semver" \
+  --option "special" \
+  --required "false"

@@ -3,5 +3,5 @@
 # Mon Oct 16 13:35:36 CDT 2017
 NAME=bump
 DESCRIPTION="bump semantic version segment"
-OPTIONS="input_version segment"
+OPTIONS="input_version segment special"
 GENERATE_HELP="true"
