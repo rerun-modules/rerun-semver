@@ -25,7 +25,7 @@ describe "compare-invalid-type"
 #
 
 # ------------------------------
-# X.X.X ?? X.X.X
+# X.X.X ?? X.X.X ?
 # ------------------------------
 it_errors_when_comparison_type_invalid() {
   error_output=$(rerun semver: compare \

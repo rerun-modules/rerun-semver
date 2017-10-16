@@ -13,21 +13,31 @@ rerun() {
 
 # The Plan
 # --------
-describe "compare-release-equals-rc"
+describe "compare-release-pess-minor-release"
 
 #
-# comparison type: equals -- left release version, right rc version
+# comparison type: pess minor -- release versions
 #
 
 # ------------------------------
-# X.X.X == X.X.X-Z ?
+# X.X.X ~> X.X.X ?
 # ------------------------------
-it_ret1_when_rel_ver_gt_rc_ver() {
+it_ret0_when_rel_ver_eq_rel_ver() {
+  rerun semver: compare \
+    --left_version "$RELEASE_VERSION_TWO_FOUR_SIX" \
+    --compare "pess_minor" \
+    --right_version "$RELEASE_VERSION_TWO_FOUR_SIX"
+}
+
+# ------------------------------
+# X.X.(1) ~> X.X.(2) ?
+# ------------------------------
+it_ret1_when_rel_patch_ver_lt_rel_patch_ver() {
   local exitcode=
   $(rerun semver: compare \
     --left_version "$RELEASE_VERSION_TWO_FOUR_SIX" \
-    --compare "eq" \
-    --right_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE") && {
+    --compare "pess_minor" \
+    --right_version "$RELEASE_VERSION_TWO_FOUR_EIGHT") && {
     echo >&2 "rerun test command succeeded"; return 1
   } || {
     exitcode=$?; test $exitcode -eq 1
@@ -37,48 +47,24 @@ it_ret1_when_rel_ver_gt_rc_ver() {
 }
 
 # ------------------------------
-# X.X.(1) == X.X.(2)-Z ?
+# X.X.(2) ~> X.X.(1) ?
 # ------------------------------
-it_ret1_when_rel_patch_ver_lt_rc_patch_ver() {
-  local exitcode=
-  $(rerun semver: compare \
-    --left_version "$RELEASE_VERSION_TWO_FOUR_SIX" \
-    --compare "eq" \
-    --right_version "$RC_VERSION_TWO_FOUR_EIGHT_RC_ONE") && {
-    echo >&2 "rerun test command succeeded"; return 1
-  } || {
-    exitcode=$?; test $exitcode -eq 1
-  } || {
-    echo >&2 "rerun test command failed with exit code: $exitcode"; return 1
-  }
-}
-
-# ------------------------------
-# X.X.(2) == X.X.(1)-Z ?
-# ------------------------------
-it_ret1_when_rel_patch_ver_gt_rc_patch_ver() {
-  local exitcode=
-  $(rerun semver: compare \
+it_ret0_when_rel_patch_ver_gt_rel_patch_ver() {
+  rerun semver: compare \
     --left_version "$RELEASE_VERSION_TWO_FOUR_EIGHT" \
-    --compare "eq" \
-    --right_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE") && {
-    echo >&2 "rerun test command succeeded"; return 1
-  } || {
-    exitcode=$?; test $exitcode -eq 1
-  } || {
-    echo >&2 "rerun test command failed with exit code: $exitcode"; return 1
-  }
+    --compare "pess_minor" \
+    --right_version "$RELEASE_VERSION_TWO_FOUR_SIX"
 }
 
 # ------------------------------
-# X.(1).X == X.(2).X-Z ?
+# X.(1).X ~> X.(2).X ?
 # ------------------------------
-it_ret1_when_rel_minor_ver_lt_rc_minor_ver() {
+it_ret1_when_rel_minor_ver_lt_rel_minor_ver() {
   local exitcode=
   $(rerun semver: compare \
     --left_version "$RELEASE_VERSION_TWO_FOUR_SIX" \
-    --compare "eq" \
-    --right_version "$RC_VERSION_TWO_SIX_SIX_RC_ONE") && {
+    --compare "pess_minor" \
+    --right_version "$RELEASE_VERSION_TWO_SIX_SIX") && {
     echo >&2 "rerun test command succeeded"; return 1
   } || {
     exitcode=$?; test $exitcode -eq 1
@@ -88,31 +74,24 @@ it_ret1_when_rel_minor_ver_lt_rc_minor_ver() {
 }
 
 # ------------------------------
-# X.(2).X == X.(1).X-Z ?
+# X.(2).X ~> X.(1).X ?
 # ------------------------------
-it_ret1_when_rel_minor_ver_gt_rc_minor_ver() {
-  local exitcode=
-  $(rerun semver: compare \
+it_ret0_when_rel_minor_ver_gt_rel_minor_ver() {
+  rerun semver: compare \
     --left_version "$RELEASE_VERSION_TWO_SIX_SIX" \
-    --compare "eq" \
-    --right_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE") && {
-    echo >&2 "rerun test command succeeded"; return 1
-  } || {
-    exitcode=$?; test $exitcode -eq 1
-  } || {
-    echo >&2 "rerun test command failed with exit code: $exitcode"; return 1
-  }
+    --compare "pess_minor" \
+    --right_version "$RELEASE_VERSION_TWO_FOUR_SIX"
 }
 
 # ------------------------------
-# (1).X.X == (2).X.X-Z ?
+# (1).X.X ~> (2).X.X ?
 # ------------------------------
-it_ret1_when_rel_major_ver_lt_rc_major_ver() {
+it_ret1_when_rel_major_ver_lt_rel_major_ver() {
   local exitcode=
   $(rerun semver: compare \
     --left_version "$RELEASE_VERSION_TWO_FOUR_SIX" \
-    --compare "eq" \
-    --right_version "$RC_VERSION_EIGHT_FOUR_SIX_RC_ONE") && {
+    --compare "pess_minor" \
+    --right_version "$RELEASE_VERSION_EIGHT_FOUR_SIX") && {
     echo >&2 "rerun test command succeeded"; return 1
   } || {
     exitcode=$?; test $exitcode -eq 1
@@ -122,14 +101,14 @@ it_ret1_when_rel_major_ver_lt_rc_major_ver() {
 }
 
 # ------------------------------
-# (2).X.X == (1).X.X-Z ?
+# (2).X.X ~> (1).X.X ?
 # ------------------------------
-it_ret1_when_rel_major_ver_gt_rc_major_ver() {
+it_ret1_when_rel_major_ver_gt_rel_major_ver() {
   local exitcode=
   $(rerun semver: compare \
     --left_version "$RELEASE_VERSION_EIGHT_FOUR_SIX" \
-    --compare "eq" \
-    --right_version "$RC_VERSION_TWO_FOUR_SIX_RC_ONE") && {
+    --compare "pess_minor" \
+    --right_version "$RELEASE_VERSION_TWO_FOUR_SIX") && {
     echo >&2 "rerun test command succeeded"; return 1
   } || {
     exitcode=$?; test $exitcode -eq 1
