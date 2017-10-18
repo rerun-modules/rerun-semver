@@ -1,5 +1,6 @@
 # execution examples
 # RERUN_MODULES=$(pwd)/modules ./rerun semver:
+# RERUN_MODULES=$(pwd)/modules ./rerun semver: bump --input_version '1.0.0' --segment 'special' --special 'rc01'
 # RERUN_MODULES=$(pwd)/modules ./rerun semver: extract --input_version '1.4.8-rc01' --segment major
 # RERUN_MODULES=$(pwd)/modules ./rerun semver: compare --left_version '1.0.0' --compare 'eq' --right_version '1.0.0'
 # RERUN_MODULES=$(pwd)/modules ./rerun semver: parse --input_string 'my-module-1.0.0-rc01.tar.gz' --trim_suffix '.tar.gz'
@@ -43,6 +44,13 @@ RERUN_MODULES=$(pwd)/modules ./rerun stubbs: \
   --description "extract semantic version segment" \
   --module "semver"
 
+# rerun semver: bump
+RERUN_MODULES=$(pwd)/modules ./rerun stubbs: \
+  add-command \
+  --command "bump" \
+  --description "bump semantic version segment" \
+  --module "semver"
+
 # --input_string
 RERUN_MODULES=$(pwd)/modules ./rerun stubbs: \
   add-option \
@@ -59,7 +67,7 @@ RERUN_MODULES=$(pwd)/modules ./rerun stubbs: \
 RERUN_MODULES=$(pwd)/modules ./rerun stubbs: \
   add-option \
   --arg "true" \
-  --command "extract,validate" \
+  --command "extract,validate,bump" \
   --description "input semantic version" \
   --export "false" \
   --long "input_version" \
@@ -119,10 +127,22 @@ RERUN_MODULES=$(pwd)/modules ./rerun stubbs: \
 RERUN_MODULES=$(pwd)/modules ./rerun stubbs: \
   add-option \
   --arg "true" \
-  --command "extract" \
-  --description "version segment to extract (major|minor|patch|special)" \
+  --command "extract,bump" \
+  --description "version segment (major|minor|patch|special)" \
   --export "false" \
   --long "segment" \
   --module "semver" \
   --option "segment" \
   --required "true"
+
+# --special
+RERUN_MODULES=$(pwd)/modules ./rerun stubbs: \
+  add-option \
+  --arg "true" \
+  --command "bump" \
+  --description "special version" \
+  --export "false" \
+  --long "special" \
+  --module "semver" \
+  --option "special" \
+  --required "false"
