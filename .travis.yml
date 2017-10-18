@@ -2,7 +2,8 @@ dist: trusty
 sudo: false
 language: c
 compiler: gcc
-script: ./travis-ci.sh
+if: tag IS blank
+script: /usr/lib/x86_64-linux-gnu/rerun/travis-ci-modules.sh
 notifications:
   irc:
   - irc.freenode.org#rerun
@@ -31,3 +32,4 @@ env:
   - BINTRAY_USER=stagrlee
   - BINTRAY_ORG=rerun
   - secure: JWYIgzYTHTu1UMheMq5pAJxAWMytieKZY2MD3CaPAGFxtGPtUQJmA62drfjsa9ar+QSOkqOF74fxQcGCqOQCvXOjnm11xyVjuzN/7Jcov8bLh6Xc6w6AbT4KMh4V/nxu4C69iln9+el9CIlbSWnGOKLXrJSSXXF469O3CvQw0aSBQxot7GkhvSS6/0yN0WiYqpLiuXjdMGyDdQlq8LyOnxfkYK1+8vJZiPA2Pl+e++jfZbJSChdjsaTYOcswWWaTvZcdHtKo4CXgwjGVjcz0S7BT/AdOEpBrk95ceC8T1NSmKk1H/mRerf8/jH+0ZxCgqNlWH72k6OsW3KE7iTAE800yB4JnIoW8Q4lCd7GriAnkCdsiwXK6D2Jhe47udwZLD67HnNSSPEqggJp2H5V3fTw5EUHOo3WUj0SxyWlHtAhbc//MDGN/Sfoca7fEKVgWAI18AkpxB4+DXp0PCU/H6ruyq3hLoHn1t4F+2Ba51zIPZfOpXVsipF7+2s3EI8Wr/yhJV0fhvH++ppQAhCFrul1Nc4LzZ9M9K2af37+7oOF5woAe0dNNgnJCQD4kbK1eCStuRqpcdyZr89aWAdULTKTbPVHlYcFCmhNk/JzUDbjSFkc7TnKBJWa/teruDD8keNV/m3l6fFwfFpt7I4XnWUcH1+h6u2U+0JN//xuDS/w=
+  - secure: Vw1PH+byo+bGF8CJXKV/Ix8X7KxMsRcbMpQqx/7Ql0FbFbXya7f4J3olYkU2F+2xL1izoE/PAy6pautUgckgH2xjU5CF9YowXwZ1fOGuuAp7yv4Zgj8JXvdVSiyebzbp0iEja+o/3D9VS/yhG2X0m7pYtNTBDSSZiOcRJMmB3DC3vsGam3Qz4uYhkU4TJRBEu4a79ZdDCxtLbAiKw2vChshvyt6gU3TeMRhYpzxRvRPoaPOC90WV38rjZLjcgsb4pK3D6AY/IM7OWA9VW9qEKox6DmgzAFzCANz0YS1SRM6mBSHlmd2NcEP0ZRMysHUgKIy5TKcteK0PydCPvxmxghp4+j5pVVMBec73H0vAs1bZwEs+4diTlaT7xaVL/DhE9YZ/qRAgLJ9aG3muPmL6ISL2XPCCEy5MNNPdH9dI0QVOgNR+Dd5JzTdWj7BG6wdTBfgSOZBqXguAiQcsPQzKxcmg3N/aPLaiLIw9dA4UYnwFAblpd+xZWAZDzQZC8eOITC2g9LoEPblXOD4pjPr34Fg5uWQ5oGIG5gyJ0wTyZOU2MSu0jFTsNAhJF2lH5QkSXBrjoPkBmZFQWk8jzxZq18qbbKXoMvcY+SlbJeeeUPrN3Mt0uI0BS/w/DOtHB9CKfEm1Y3NNNYhlOQ9D9+7T0jnxTvgp/LxRF8G3AFLXi80=
