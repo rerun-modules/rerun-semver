@@ -506,19 +506,17 @@ semver_compare() {
   return 4
 }
 
-# bumps semantic version segment
+# bumps semantic version release segment
 # args:
 #   1 - version segment to bump
 #   2 - version to bump
-#   3 - (segment: special) new special version
 # return codes:
 #   0 - success
 #   1 - general error
 #   2 - input error
-semver_bump() {
+semver_bump_release_segment() {
   local bump_segment="${1:-}"
   local input_version="${2:-}"
-  local new_special="${3:-}"
   local output_version=
   
   # validate input
@@ -528,10 +526,10 @@ semver_bump() {
   fi
   
   case "$bump_segment" in
-    "major"|"minor"|"patch"|"special")
+    "major"|"minor"|"patch")
       ;;
     *)
-      rerun_log error "invalid segment type '$bump_segment', valid options are: major | minor | patch | special"; return 2
+      rerun_log error "invalid segment type '$bump_segment', valid options are: major | minor | patch"; return 2
       ;;
   esac
   
@@ -561,13 +559,17 @@ semver_bump() {
     rerun_log error "failed to parse semver special for input version: $input_version"; return 1
   fi
   
+  # check input version
+  
+  if [ -n "$special_version" ]; then
+    rerun_log error "unable to bump release version segment, input version contains special version"; return 1
+  fi
+  
   # bump version
   
   case "$bump_segment" in
     "major")
-      if [ -n "$special_version" ]; then
-        rerun_log error "unable to bump major version, input version contains special version"; return 1
-      elif [ -z "$major_version" ]; then
+      if [ -z "$major_version" ]; then
         rerun_log error "unable to bump major version, major version is empty or unknown"; return 1
       fi
       
@@ -578,9 +580,7 @@ semver_bump() {
       output_version="${major_version}.${minor_version}.${patch_version}"
       ;;
     "minor")
-      if [ -n "$special_version" ]; then
-        rerun_log error "unable to bump minor version, input version contains special version"; return 1
-      elif [ -z "$major_version" ]; then
+      if [ -z "$major_version" ]; then
         rerun_log error "unable to bump minor version, major version is empty or unknown"; return 1
       elif [ -z "$minor_version" ]; then
         rerun_log error "unable to bump minor version, minor version is empty or unknown"; return 1
@@ -592,9 +592,7 @@ semver_bump() {
       output_version="${major_version}.${minor_version}.${patch_version}"
       ;;
     "patch")
-      if [ -n "$special_version" ]; then
-        rerun_log error "unable to bump patch version, input version contains special version"; return 1
-      elif [ -z "$major_version" ]; then
+      if [ -z "$major_version" ]; then
         rerun_log error "unable to bump patch version, major version is empty or unknown"; return 1
       elif [ -z "$minor_version" ]; then
         rerun_log error "unable to bump patch version, minor version is empty or unknown"; return 1
@@ -606,27 +604,82 @@ semver_bump() {
       
       output_version="${major_version}.${minor_version}.${patch_version}"
       ;;
-    "special")
-      if [ -z "$special_version" ]; then
-        rerun_log error "cannot bump special version, must specify input version with valid special"; return 2
-      elif [ -z "$new_special" ]; then
-        rerun_log error "cannot automatically bump special version, must specify new special version"; return 2
-      elif [ -z "$major_version" ]; then
-        rerun_log error "unable to bump special version, major version is empty or unknown"; return 1
-      elif [ -z "$minor_version" ]; then
-        rerun_log error "unable to bump special version, minor version is empty or unknown"; return 1
-      elif [ -z "$patch_version" ]; then
-        rerun_log error "unable to bump special version, patch version is empty or unknown"; return 1
-      fi
-      
-      special_version="$new_special"
-      
-      output_version="${major_version}.${minor_version}.${patch_version}-${special_version}"
-      ;;
     *)
-      rerun_log error "invalid bump type '$bump_segment', valid options are: major | minor | patch | special"; return 2
+      rerun_log error "invalid bump type '$bump_segment', valid options are: major | minor | patch"; return 2
       ;;
   esac
+  
+  echo "$output_version"
+  
+  return 0
+}
+
+# bumps semantic version with special
+# args:
+#   1 - version to bump
+#   2 - new special version
+# return codes:
+#   0 - success
+#   1 - general error
+#   2 - input error
+semver_bump_existing_special() {
+  local input_version="${1:-}"
+  local new_special="${2:-}"
+  local output_version=
+  
+  # validate input
+  
+  if [ -z "$input_version" ]; then
+    rerun_log error "input version is null or empty"; return 2
+  fi
+  
+  if [ -z "$new_special" ]; then
+    rerun_log error "cannot automatically bump special version, must specify new special version"; return 2
+  fi
+  
+  # get version components
+  
+  local major_version=
+  major_version="$(semver_extract major $input_version)"
+  if [ $? -ne 0 ]; then
+    rerun_log error "failed to parse semver major for input version: $input_version"; return 1
+  fi
+  
+  local minor_version=
+  minor_version="$(semver_extract minor $input_version)"
+  if [ $? -ne 0 ]; then
+    rerun_log error "failed to parse semver minor for input version: $input_version"; return 1
+  fi
+  
+  local patch_version=
+  patch_version="$(semver_extract patch $input_version)"
+  if [ $? -ne 0 ]; then
+    rerun_log error "failed to parse semver patch for input version: $input_version"; return 1
+  fi
+  
+  local special_version=
+  special_version="$(semver_extract special $input_version)"
+  if [ $? -ne 0 ]; then
+    rerun_log error "failed to parse semver special for input version: $input_version"; return 1
+  fi
+  
+  # check input version
+
+  if [ -z "$special_version" ]; then
+    rerun_log error "cannot bump special version, must specify input version with valid special"; return 2
+  elif [ -z "$major_version" ]; then
+    rerun_log error "unable to bump special version, major version is empty or unknown"; return 1
+  elif [ -z "$minor_version" ]; then
+    rerun_log error "unable to bump special version, minor version is empty or unknown"; return 1
+  elif [ -z "$patch_version" ]; then
+    rerun_log error "unable to bump special version, patch version is empty or unknown"; return 1
+  fi
+  
+  # bump version
+
+  special_version="$new_special"
+
+  output_version="${major_version}.${minor_version}.${patch_version}-${special_version}"
   
   echo "$output_version"
   

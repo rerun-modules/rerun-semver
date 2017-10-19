@@ -1,13 +1,16 @@
 # execution examples
 # RERUN_MODULES=$(pwd)/modules ./rerun semver:
-# RERUN_MODULES=$(pwd)/modules ./rerun semver: bump --input_version '1.0.0' --segment 'special' --special 'rc01'
-# RERUN_MODULES=$(pwd)/modules ./rerun semver: extract --input_version '1.4.8-rc01' --segment major
+# RERUN_MODULES=$(pwd)/modules ./rerun semver: bump-release --input_version '1.0.0' --segment 'major'
+# RERUN_MODULES=$(pwd)/modules ./rerun semver: bump-special --input_version '1.0.0-rc01' --segment 'special' --special 'rc02'
 # RERUN_MODULES=$(pwd)/modules ./rerun semver: compare --left_version '1.0.0' --compare 'eq' --right_version '1.0.0'
+# RERUN_MODULES=$(pwd)/modules ./rerun semver: extract --input_version '1.4.8-rc01' --segment major
 # RERUN_MODULES=$(pwd)/modules ./rerun semver: parse --input_string 'my-module-1.0.0-rc01.tar.gz' --trim_suffix '.tar.gz'
 # RERUN_MODULES=$(pwd)/modules ./rerun semver: validate --input_version '1.4.8-rc01'
-# RERUN_MODULES=$(pwd)/modules ./rerun stubbs: test --module semver --plan parse
+# RERUN_MODULES=$(pwd)/modules ./rerun stubbs: test --module semver --plan bump-release
+# RERUN_MODULES=$(pwd)/modules ./rerun stubbs: test --module semver --plan bump-special
 # RERUN_MODULES=$(pwd)/modules ./rerun stubbs: test --module semver --plan compare
 # RERUN_MODULES=$(pwd)/modules ./rerun stubbs: test --module semver --plan extract
+# RERUN_MODULES=$(pwd)/modules ./rerun stubbs: test --module semver --plan parse
 # RERUN_MODULES=$(pwd)/modules ./rerun stubbs: test --module semver --plan validate
 
 # rerun semver:
@@ -44,11 +47,18 @@ RERUN_MODULES=$(pwd)/modules ./rerun stubbs: \
   --description "extract semantic version segment" \
   --module "semver"
 
-# rerun semver: bump
+# rerun semver: bump-release
 RERUN_MODULES=$(pwd)/modules ./rerun stubbs: \
   add-command \
-  --command "bump" \
-  --description "bump semantic version segment" \
+  --command "bump-release" \
+  --description "bump release version segment" \
+  --module "semver"
+
+# rerun semver: bump-special
+RERUN_MODULES=$(pwd)/modules ./rerun stubbs: \
+  add-command \
+  --command "bump-special" \
+  --description "bump special version segment" \
   --module "semver"
 
 # --input_string
@@ -67,7 +77,7 @@ RERUN_MODULES=$(pwd)/modules ./rerun stubbs: \
 RERUN_MODULES=$(pwd)/modules ./rerun stubbs: \
   add-option \
   --arg "true" \
-  --command "extract,validate,bump" \
+  --command "extract,validate,bump-release,bump-special" \
   --description "input semantic version" \
   --export "false" \
   --long "input_version" \
@@ -127,8 +137,8 @@ RERUN_MODULES=$(pwd)/modules ./rerun stubbs: \
 RERUN_MODULES=$(pwd)/modules ./rerun stubbs: \
   add-option \
   --arg "true" \
-  --command "extract,bump" \
-  --description "version segment (major|minor|patch|special)" \
+  --command "extract,bump-release" \
+  --description "version segment (major|minor|patch)" \
   --export "false" \
   --long "segment" \
   --module "semver" \
@@ -139,10 +149,10 @@ RERUN_MODULES=$(pwd)/modules ./rerun stubbs: \
 RERUN_MODULES=$(pwd)/modules ./rerun stubbs: \
   add-option \
   --arg "true" \
-  --command "bump" \
+  --command "bump-special" \
   --description "special version" \
   --export "false" \
   --long "special" \
   --module "semver" \
   --option "special" \
-  --required "false"
+  --required "true"
