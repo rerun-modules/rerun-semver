@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-#/ command: semver:bump: "bump semantic version segment"
-#/ usage: rerun semver:bump  --input_version <>  --segment <> [ --special <>] 
+#/ command: semver:bump-release: "bump release version segment"
+#/ usage: rerun semver:bump-release  --input_version <>  --segment <> 
 #/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
-#/ option-variables: INPUT_VERSION SEGMENT SPECIAL
+#/ option-variables: INPUT_VERSION SEGMENT
 
-. $RERUN_MODULE_DIR/lib/functions.sh bump || { 
+. $RERUN_MODULE_DIR/lib/functions.sh bump-release || { 
   echo >&2 "Failed loading function library." ; exit 1 ; 
 }
 
@@ -17,7 +17,7 @@ rerun_options_parse "$@"
 # ----------------------
 
 # - - -
-semver_bump "$SEGMENT" "$INPUT_VERSION" "$SPECIAL"
+semver_bump_release_segment "$SEGMENT" "$INPUT_VERSION"
 # - - -
 
 # Done. Exit with last command exit status.
