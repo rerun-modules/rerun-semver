@@ -162,7 +162,7 @@ RERUN_MODULES=$(pwd)/modules ./rerun stubbs: \
   add-option \
   --arg "true" \
   --command "extract,bump-release" \
-  --description "version segment (major|minor|patch)" \
+  --description "version segment" \
   --export "false" \
   --long "segment" \
   --module "semver" \
