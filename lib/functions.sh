@@ -685,3 +685,145 @@ semver_bump_existing_special() {
   
   return 0
 }
+
+# promotes a special version to a release
+# args:
+#   1 - input version
+# return codes:
+#   0 - success
+#   1 - general error
+#   2 - input error
+semver_promote_to_release() {
+  local input_version="${1:-}"
+  local output_version=
+  
+  # validate input
+  
+  if [ -z "$input_version" ]; then
+    rerun_log error "input version is null or empty"; return 2
+  fi
+  
+  # get version components
+  
+  local major_version=
+  major_version="$(semver_extract major $input_version)"
+  if [ $? -ne 0 ]; then
+    rerun_log error "failed to parse semver major for input version: $input_version"; return 1
+  fi
+  
+  local minor_version=
+  minor_version="$(semver_extract minor $input_version)"
+  if [ $? -ne 0 ]; then
+    rerun_log error "failed to parse semver minor for input version: $input_version"; return 1
+  fi
+  
+  local patch_version=
+  patch_version="$(semver_extract patch $input_version)"
+  if [ $? -ne 0 ]; then
+    rerun_log error "failed to parse semver patch for input version: $input_version"; return 1
+  fi
+  
+  local special_version=
+  special_version="$(semver_extract special $input_version)"
+  if [ $? -ne 0 ]; then
+    rerun_log error "failed to parse semver special for input version: $input_version"; return 1
+  fi
+  
+  # check input version
+  
+  if [ -z "$special_version" ]; then
+    rerun_log error "unable to promote to release version, must specify input version with valid special"; return 2
+  elif [ -z "$major_version" ]; then
+    rerun_log error "unable to promote to release version, major version is empty or unknown"; return 1
+  elif [ -z "$minor_version" ]; then
+    rerun_log error "unable to promote to release version, minor version is empty or unknown"; return 1
+  elif [ -z "$patch_version" ]; then
+    rerun_log error "unable to promote to release version, patch version is empty or unknown"; return 1
+  fi
+  
+  # build version without special
+  
+  output_version="${major_version}.${minor_version}.${patch_version}"
+  
+  echo "$output_version"
+  
+  return 0
+}
+
+# promotes a release version to a special
+# args:
+#   1 - input version
+#   2 - new special version
+# return codes:
+#   0 - success
+#   1 - general error
+#   2 - input error
+semver_promote_to_special() {
+  local input_version="${1:-}"
+  local new_special="${2:-}"
+  local output_version=
+  
+  # validate input
+  
+  if [ -z "$input_version" ]; then
+    rerun_log error "input version is null or empty"; return 2
+  fi
+  
+  if [ -z "$new_special" ]; then
+    rerun_log error "cannot automatically promote to special version, must specify new special version"; return 2
+  fi
+  
+  # get version components
+  
+  local major_version=
+  major_version="$(semver_extract major $input_version)"
+  if [ $? -ne 0 ]; then
+    rerun_log error "failed to parse semver major for input version: $input_version"; return 1
+  fi
+  
+  local minor_version=
+  minor_version="$(semver_extract minor $input_version)"
+  if [ $? -ne 0 ]; then
+    rerun_log error "failed to parse semver minor for input version: $input_version"; return 1
+  fi
+  
+  local patch_version=
+  patch_version="$(semver_extract patch $input_version)"
+  if [ $? -ne 0 ]; then
+    rerun_log error "failed to parse semver patch for input version: $input_version"; return 1
+  fi
+  
+  local special_version=
+  special_version="$(semver_extract special $input_version)"
+  if [ $? -ne 0 ]; then
+    rerun_log error "failed to parse semver special for input version: $input_version"; return 1
+  fi
+  
+  # check input version
+  
+  if [ -n "$special_version" ]; then
+    rerun_log error "unable to promote to special version, must specify input version without special"; return 2
+  elif [ -z "$major_version" ]; then
+    rerun_log error "unable to promote to special version, major version is empty or unknown"; return 1
+  elif [ -z "$minor_version" ]; then
+    rerun_log error "unable to promote to special version, minor version is empty or unknown"; return 1
+  elif [ -z "$patch_version" ]; then
+    rerun_log error "unable to promote to special version, patch version is empty or unknown"; return 1
+  fi
+  
+  # build version without special
+  
+  output_version="${major_version}.${minor_version}.${patch_version}"
+  
+  # bump the patch version
+  
+  output_version="$(semver_bump_release_segment "patch" "$output_version")" || {
+    rerun_log error "failed bumping release version patch segment"; return 1
+  }
+  
+  output_version="${output_version}-${new_special}"
+  
+  echo "$output_version"
+  
+  return 0
+}
