@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+#/ command: semver:promote-to-special: "promote release version to special"
+#/ usage: rerun semver:promote-to-special  --input_version <>  --special <> 
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables: INPUT_VERSION SPECIAL
+
+. $RERUN_MODULE_DIR/lib/functions.sh promote-to-special || { 
+  echo >&2 "Failed loading function library." ; exit 1 ; 
+}
+
+set -o errexit -o nounset -o pipefail
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+
+# - - -
+semver_promote_to_special "$INPUT_VERSION" "$SPECIAL"
+# - - -
+
+# Done. Exit with last command exit status.
+exit $?
